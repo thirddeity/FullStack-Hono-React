@@ -1,0 +1,69 @@
+import { Component } from "react";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { Form } from "react-final-form";
+import { Button } from "@/components/ui/button";
+import { initialLogin, validateLogin, type LoginForm as ZodForm } from "@repo/schema";
+import { InputFF } from "@/components/finalform/Input";
+import type { FormApi } from "final-form";
+import { CheckboxFF } from "@/components/finalform/Checkbox";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Login02Icon } from "@hugeicons/core-free-icons";
+import { api, Rest } from "@/lib/api";
+
+class LoginForm extends Component {
+  formApi: FormApi<ZodForm> | null = null;
+
+  private saveApi = async (data: ZodForm) => {
+    try {
+      console.log("save param =>", data);
+      const res = await Rest(api.login.$post({ json: data }));
+      console.log("save api =>", res);
+      if (res.status === "ok") {
+        //
+      }
+    } catch (error) {
+      console.error("saveApi err =>", error);
+    }
+  };
+
+  private onSubmit = (values: ZodForm) => {
+    this.saveApi(values);
+  };
+
+  render() {
+    return (
+      <div>
+        <Form<ZodForm>
+          initialValues={initialLogin}
+          onSubmit={this.onSubmit}
+          validate={validateLogin}
+          subscription={{ submitting: true, pristine: true }}
+        >
+          {({ handleSubmit, pristine, form }) => {
+            if (!this.formApi) this.formApi = form;
+            return (
+              <form onSubmit={handleSubmit}>
+                <FieldGroup>
+                  <div className="flex flex-col gap-4">
+                    <InputFF name="username" label="Username" placeholder="ระบุชื่อผู้ใช้" />
+                    <InputFF name="password" label="Password" placeholder="ระบุรหัสผ่าน" type="password" />
+                    <CheckboxFF name="remember" label="Remember me" />
+                  </div>
+
+                  <Field orientation="horizontal" className="flex flex-row justify-end">
+                    <Button variant="default" type="submit" disabled={pristine}>
+                      Login
+                      <HugeiconsIcon icon={Login02Icon} />
+                    </Button>
+                  </Field>
+                </FieldGroup>
+              </form>
+            );
+          }}
+        </Form>
+      </div>
+    );
+  }
+}
+
+export default LoginForm;
