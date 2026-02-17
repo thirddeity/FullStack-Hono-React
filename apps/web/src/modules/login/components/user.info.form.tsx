@@ -12,7 +12,11 @@ import type { FormApi } from "final-form";
 import { api, Rest } from "@/lib/api";
 import { TextareaFF } from "@/components/finalform/Textarea";
 
-class UserInfoForm extends Component {
+type Props = {
+  setTab: (v: number) => void;
+};
+
+class UserInfoForm extends Component<Props> {
   formApi: FormApi<UserForm> | null = null;
 
   async componentDidMount() {
@@ -102,7 +106,7 @@ class UserInfoForm extends Component {
                   <Button variant="default" type="submit" disabled={pristine}>
                     Submit
                   </Button>
-                  <Button variant="outline" type="button">
+                  <Button variant="outline" type="button" onClick={() => this.props.setTab(1)}>
                     Cancel
                   </Button>
                 </Field>

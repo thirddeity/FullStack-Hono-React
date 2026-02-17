@@ -31,10 +31,13 @@ const createResponse = <T>(data: T, message = "success", code = 200) => {
 };
 
 const routes = app
-  .post("/login", zValidator("json", loginSchema), async (c) => {
-    const { username, password } = c.req.valid("json");
-    return c.json(createResponse(true, "Login successful"));
-  })
+  .post("/login", zValidator("json", loginSchema, (result, c) => {
+    if (!result.success) return c.json(createResponse(false, "Login Failed"))
+  }),
+    async (c) => {
+      return c.json(createResponse(true, "Login successful"));
+    }
+  )
   .get("/userInfo", (c) => {
     const data = {
       email: "test@example.com",

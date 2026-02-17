@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import UserInfoForm from "./components/user.info.form";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Environment, OrbitControls } from "@react-three/drei";
 import { Model } from "./components/model";
@@ -9,8 +9,8 @@ import LoginForm from "./components/login.form";
 
 export function ComponentExample() {
   return (
-    <div className="relative w-screen h-screen bg-black">
-      <div className="absolute inset-0 z-0">
+    <div className="relative w-full h-screen bg-black">
+      <div className="absolute inset-0 z-0 opacity-40">
         <Canvas camera={{ far: 200000 }}>
           <Suspense fallback={null}>
             <ambientLight />
@@ -29,41 +29,47 @@ export function ComponentExample() {
         </Canvas>
       </div>
       <div className="relative z-10 w-full h-full flex flex-col justify-center items-center">
-        {/* <UserInfoCard /> */}
-        <LoginCard />
+        <CardContainer />
       </div>
     </div>
   );
 }
 
-function UserInfoCard() {
+function CardContainer() {
+  const [tab, setTab] = useState(1);
+  return <>{tab === 1 ? LoginCard(setTab) : UserInfoCard(setTab)}</>;
+}
+
+function UserInfoCard(setTab: (v: number) => void) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>User Information</CardTitle>
       </CardHeader>
       <CardContent>
-        <UserInfoForm />
+        <UserInfoForm setTab={setTab} />
       </CardContent>
     </Card>
   );
 }
 
-function LoginCard() {
+function LoginCard(setTab: (v: number) => void) {
   return (
-    <div className="w-full bg-white backdrop-blur-lg rounded-xl max-w-4xl opacity-95 ">
-      <div className="flex flex-row">
-        <div className="flex-1">
-          <div
-            className={`h-90 bg-[url('https://www.gifcen.com/wp-content/uploads/2022/11/stickman-gif-8.gif')] bg-cover bg-center rounded-l-lg`}
-          />
-        </div>
-        <div className="flex-1 p-4">
-          <CardTitle className="text-2xl text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-            User Login
-          </CardTitle>
-          <div className="mt-6">
-            <LoginForm />
+    <div className="border-4 border-primary/70 w-full rounded-2xl max-w-4xl p-1">
+      <div className="w-full bg-white backdrop-blur-lg rounded-xl max-w-4xl opacity-98 ">
+        <div className="flex md:flex-row flex-col">
+          <div className="flex-1">
+            <div
+              className={`h-full bg-[url('https://i.pinimg.com/originals/fa/09/23/fa09230ae176183f8dea872c58961041.gif')] bg-cover bg-center rounded-l-lg`}
+            />
+          </div>
+          <div className="flex-2 md:flex-1 p-4">
+            <CardTitle className="text-2xl text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+              User Login
+            </CardTitle>
+            <div className="mt-6">
+              <LoginForm setTab={setTab} />
+            </div>
           </div>
         </div>
       </div>
