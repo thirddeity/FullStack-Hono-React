@@ -34,7 +34,7 @@ export function InputFF({
             {label && (
               <Label
                 htmlFor={name}
-                className={cn(isInvalid && "text-danger", props.disabled && "opacity-70", `text-${props.color}`)}
+                className={cn(isInvalid && "text-danger", props.disabled && "opacity-70",)}
               >
                 {label}
                 {isRequired && <span className="text-danger">*</span>}

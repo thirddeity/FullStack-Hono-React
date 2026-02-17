@@ -56,7 +56,7 @@ function UserInfoCard(setTab: (v: number) => void) {
 function LoginCard(setTab: (v: number) => void) {
   return (
     <div className="border-4 border-primary/70 w-full rounded-2xl max-w-4xl p-1">
-      <div className="w-full bg-white backdrop-blur-lg rounded-xl max-w-4xl opacity-98 ">
+      <div className="w-full bg-background backdrop-blur-lg rounded-xl max-w-4xl opacity-98 ">
         <div className="flex md:flex-row flex-col">
           <div className="flex-1">
             <div
