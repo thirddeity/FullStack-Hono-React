@@ -64,7 +64,7 @@ function LoginCard(setTab: (v: number) => void) {
             />
           </div>
           <div className="flex-2 md:flex-1 p-4">
-            <CardTitle className="text-2xl text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+            <CardTitle className="font-bold text-2xl text-center bg-clip-text text-transparent bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500">
               User Login
             </CardTitle>
             <div className="mt-6">

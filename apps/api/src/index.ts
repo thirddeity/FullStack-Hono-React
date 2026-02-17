@@ -1,8 +1,16 @@
+import "dotenv/config";
 import { serve } from "@hono/node-server";
 import { zValidator } from "@hono/zod-validator";
 import { loginSchema, userInfoSchema } from "@repo/schema";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import postgres from "postgres";
+import { userInfo } from "./db/schema";
+import { drizzle } from "drizzle-orm/postgres-js";
+
+const connectionString = process.env.DATABASE_URL!;
+const client = postgres(connectionString);
+const db = drizzle(client);
 
 const app = new Hono().basePath("/api");
 const port = 3000;
@@ -38,14 +46,9 @@ const routes = app
       return c.json(createResponse(true, "Login successful"));
     }
   )
-  .get("/userInfo", (c) => {
-    const data = {
-      email: "test@example.com",
-      role: "",
-      framework: "nuxt",
-      comment: "Loaded from Hono API",
-    };
-
+  .get("/userInfo", async (c) => {
+    const data = await db.select().from(userInfo);
+    console.log("data =>", data)
     return c.json(createResponse(data));
   })
   .post("/userInfo", zValidator("json", userInfoSchema), async (c) => {
