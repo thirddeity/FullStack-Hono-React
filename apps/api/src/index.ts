@@ -5,12 +5,13 @@ import { loginSchema, userInfoSchema } from "@repo/schema";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import postgres from "postgres";
-import { userInfo } from "./db/schema";
 import { drizzle } from "drizzle-orm/postgres-js";
+import { userInfoRoutes } from "./user.info";
+import { loginRoutes } from "./login";
 
 const connectionString = process.env.DATABASE_URL!;
 const client = postgres(connectionString);
-const db = drizzle(client);
+export const db = drizzle(client);
 
 const app = new Hono().basePath("/api");
 const port = 3000;
@@ -28,10 +29,10 @@ app.use(
   })
 );
 
-const createResponse = <T>(data: T, message = "success", code = 200) => {
+export const createResponse = <T>(data: T, message = "success", code = 200, status: "ok" | "no" = "ok") => {
   return {
     code,
-    status: "ok",
+    status,
     message,
     detail: null,
     data,
@@ -39,29 +40,8 @@ const createResponse = <T>(data: T, message = "success", code = 200) => {
 };
 
 const routes = app
-  .post("/login", zValidator("json", loginSchema, (result, c) => {
-    if (!result.success) return c.json(createResponse(false, "Login Failed"))
-  }),
-    async (c) => {
-      return c.json(createResponse(true, "Login successful"));
-    }
-  )
-  .get("/userInfo", async (c) => {
-    const data = await db.select().from(userInfo);
-    console.log("data =>", data)
-    return c.json(createResponse(data));
-  })
-  .post("/userInfo", zValidator("json", userInfoSchema), async (c) => {
-    const { email, role, framework, comment } = c.req.valid("json");
-    const data = {
-      email,
-      role,
-      comment,
-      framework,
-      id: 1,
-    };
-    return c.json(createResponse(data, "Login successful"));
-  });
+  .route("/", userInfoRoutes)
+  .route("/", loginRoutes)
 
 
 serve({ fetch: app.fetch, port });

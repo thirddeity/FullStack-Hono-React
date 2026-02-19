@@ -31,7 +31,7 @@ class UserInfoForm extends Component<Props> {
         const apiData = res.data;
         console.log("apiData =>", apiData);
         if (this.formApi) {
-          this.formApi.initialize(apiData);
+          // this.formApi.initialize(apiData);
         }
       }
     } catch (error) {

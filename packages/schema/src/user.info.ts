@@ -2,6 +2,7 @@ import z from "zod";
 import { validateWithZod } from "./zodValidator";
 
 export type UserInfoForm = {
+  id: number | null;
   email: string;
   role: string;
   framework: string;
@@ -9,6 +10,7 @@ export type UserInfoForm = {
 };
 
 export const initial: UserInfoForm = {
+  id: null,
   email: "",
   role: "",
   framework: "",

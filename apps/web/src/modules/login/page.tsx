@@ -6,8 +6,14 @@ import { Environment, OrbitControls } from "@react-three/drei";
 import { Model } from "./components/model";
 import { MathUtils } from "three";
 import LoginForm from "./components/login.form";
+import { Button } from "@/components/ui/button";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { MoonIcon, Sun02Icon } from "@hugeicons/core-free-icons";
+import { useTheme } from "@/components/theme-provider";
 
 export function ComponentExample() {
+  const [isDark, setDark] = useState<"dark" | "light">("dark");
+  const { setTheme } = useTheme();
   return (
     <div className="relative w-full h-screen bg-black">
       <div className="absolute inset-0 z-0 opacity-40">
@@ -27,6 +33,18 @@ export function ComponentExample() {
             />
           </Suspense>
         </Canvas>
+      </div>
+      <div className="fixed right-2 z-20 flex flex-row justify-end p-2">
+        <Button
+          variant={"outline"}
+          size={"icon-lg"}
+          onClick={() => {
+            setTheme(isDark === "dark" ? "light" : "dark");
+            setDark(isDark === "dark" ? "light" : "dark");
+          }}
+        >
+          {isDark === "dark" ? <HugeiconsIcon icon={MoonIcon} /> : <HugeiconsIcon icon={Sun02Icon} />}
+        </Button>
       </div>
       <div className="relative z-10 w-full h-full flex flex-col justify-center items-center">
         <CardContainer />
@@ -55,15 +73,10 @@ function UserInfoCard(setTab: (v: number) => void) {
 
 function LoginCard(setTab: (v: number) => void) {
   return (
-    <div className="border-4 border-primary/70 w-full rounded-2xl max-w-4xl p-1">
-      <div className="w-full bg-background backdrop-blur-lg rounded-xl max-w-4xl opacity-98 ">
-        <div className="flex md:flex-row flex-col">
-          <div className="flex-1">
-            <div
-              className={`h-full bg-[url('https://i.pinimg.com/originals/fa/09/23/fa09230ae176183f8dea872c58961041.gif')] bg-cover bg-center rounded-l-lg`}
-            />
-          </div>
-          <div className="flex-2 md:flex-1 p-4">
+    <div className="border-4 border-primary/70 w-full rounded-2xl md:max-w-lg p-1">
+      <div className="w-full bg-background backdrop-blur-lg rounded-xl md:max-w-lg opacity-98 ">
+        <div className="flex-col">
+          <div className="p-4">
             <CardTitle className="font-bold text-2xl text-center bg-clip-text text-transparent bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500">
               User Login
             </CardTitle>
